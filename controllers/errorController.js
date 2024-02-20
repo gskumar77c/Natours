@@ -10,7 +10,7 @@ const sendErrorDev = (err, req, res) => {
             error: err,
         });
     } else {
-        console.log(err.message);
+        // console.log(err.message);
         // FOR rendered website
         res.status(err.statusCode).render('error', {
             title: 'Something went wrong',

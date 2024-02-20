@@ -20,7 +20,7 @@ const login = async (email, password) => {
     try {
         const res = await axios({
             method: 'POST',
-            url: 'http://127.0.0.1:3000/api/v1/users/login',
+            url: '/api/v1/users/login',
             data: {
                 email,
                 password,
@@ -42,7 +42,7 @@ const signup = async (name, email, password, confirmPassword) => {
     try {
         const res = await axios({
             method: 'POST',
-            url: 'http://127.0.0.1:3000/api/v1/users/signup',
+            url: '/api/v1/users/signup',
             data: {
                 name,
                 email,
@@ -66,7 +66,7 @@ const logout = async (email, password) => {
     try {
         const res = await axios({
             method: 'GET',
-            url: 'http://127.0.0.1:3000/api/v1/users/logout',
+            url: '/api/v1/users/logout',
         });
         if (res.data.status === 'success') location.reload(true);
     } catch (err) {
@@ -79,8 +79,8 @@ const updateSettings = async (data, type) => {
     try {
         const url =
             type === 'password'
-                ? 'http://127.0.0.1:3000/api/v1/users/changePassword'
-                : 'http://127.0.0.1:3000/api/v1/users/updateMe';
+                ? '/api/v1/users/changePassword'
+                : '/api/v1/users/updateMe';
         const res = await axios({
             method: 'PATCH',
             url,
@@ -97,19 +97,16 @@ const updateSettings = async (data, type) => {
 const bookTour = async (tourId) => {
     try {
         // 1) Get checkout session from api
-        const url = `http://127.0.0.1:3000/api/v1/bookings/checkout-session/${tourId}`;
+        const url = `/api/v1/bookings/checkout-session/${tourId}`;
         const session = await axios({
             method: 'GET',
             url,
         });
 
-        console.log(session.data.session.id);
         // 2) create checout form + charge credit card
         const res = await stripe.redirectToCheckout({
             sessionId: session.data.session.id,
         });
-        console.log(res);
-        console.log('completed ', session.data.session.id);
     } catch (err) {
         showAlert('error', err);
     }
@@ -161,7 +158,6 @@ if (userDataForm) {
         form.append('name', name);
         form.append('email', email);
         form.append('photo', photo);
-        console.log(form);
 
         updateSettings(form, 'data');
     });
